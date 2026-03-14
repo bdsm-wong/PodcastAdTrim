@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # upgrade pip
-RUN pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # create system user for added security
 RUN adduser --system nonroot
@@ -15,7 +15,7 @@ COPY . .
 ENV VIRTUAL_ENV=/home/nonroot/venv
 
 # python setup
-RUN python -m venv $VIRTUAL_ENV
+RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN export FLASK_APP=main.py
 RUN pip install -r requirements.txt

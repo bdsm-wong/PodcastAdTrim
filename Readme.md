@@ -1,3 +1,19 @@
+# Steps to Set Up and Run Docker Container on Server
+**Cloning Repository (only for the first time)**
+```bash
+cd ~/Docker 
+git clone https://github.com/bdsm-wong/PodcastAdTrim -b dev
+```
+`-b dev` clones the "dev" branch
+
+**Building the Image**
+
+```bash
+cd PodcastAdTrim/server`
+sudo docker build -t podcastadtrim_server:dev_v1 .
+```
+`-t [name]:[version]` assigns a tag to the image, and `.` at the end builds the image at the current location
+
 # Audio Detection Service
 
 The **Audio Detection Service** is a Python-based utility designed to pinpoint the precise moment when a second audio snippet, extracted or recorded from a larger audio source, is played. Whether it's a snippet from a song, movie, video, or any other audio content, this service aims to determine the exact timestamp in the original audio where the provided snippet was played.
