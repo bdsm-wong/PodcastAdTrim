@@ -1,7 +1,7 @@
-FROM ubuntu:latest
+FROM python:3.12
 
 # upgrade pip
-RUN python -m pip install --upgrade pip
+RUN pip install --upgrade pip
 
 # create system user for added security
 RUN adduser --system nonroot
