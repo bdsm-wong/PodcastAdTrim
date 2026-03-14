@@ -1,8 +1,8 @@
 from flask import jsonify
 import tempfile
 import io
-from server.app.Service import AudioProcessor
-from server.app.Utils import ResponseHttp
+from ..Service import AudioProcessor
+from ..Utils import ResponseHttp
 
 class AudioDetectionController:
     """
