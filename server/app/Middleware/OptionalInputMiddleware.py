@@ -1,4 +1,4 @@
-from server.app.Utils import ResponseHttp
+from ..Utils import ResponseHttp
 
 class OptionalInputMiddleware:
     @staticmethod
