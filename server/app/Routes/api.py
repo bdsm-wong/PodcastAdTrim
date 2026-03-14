@@ -1,8 +1,8 @@
 from flask import request
-from app import app
-from app.Controllers import AudioDetectionController, AudioStorageController, StoredAudioDetectionController
-from app.Middleware import AudioDetectionMiddleware, AudioStorageMiddleware, StoredAudioDetectionMiddleware, OptionalInputMiddleware
-from app.Utils import ResponseHttp
+from server.app import app
+from server.app.Controllers import AudioDetectionController, AudioStorageController, StoredAudioDetectionController
+from server.app.Middleware import AudioDetectionMiddleware, AudioStorageMiddleware, StoredAudioDetectionMiddleware, OptionalInputMiddleware
+from server.app.Utils import ResponseHttp
 
 @app.before_request
 def before_request():
