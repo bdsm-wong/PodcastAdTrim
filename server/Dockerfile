@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.13
 
 # upgrade pip, setuptools, and wheel
 RUN pip install --upgrade pip setuptools wheel
