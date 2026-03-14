@@ -29,16 +29,28 @@ sudo docker images
 ```
 * Lists the images present.
 
-**Running the Container**
+**Starting/Stopping the Container**
 
 ```bash
-sudo docker run -d -p 8090:80 podcastadtrim_server:dev_v1
+sudo docker run -d -p 8090:80 --name podcast podcastadtrim_server:dev_v1
 ```
 
 * `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
-* `-p 8090:8000` maps the host's port 8090 (first argument) to the container's port 80 (second argument).
+* `-p 8090:80` maps the host's port 8090 (first argument) to the container's port 80 (second argument).
+* `--name podcast` assigns a short name to the container
 * `podcastadtrim_server:dev_v1` is the image name (update as needed).
 
+Check the status using:
+```bash
+sudo docker ps
+```
+
+To stop and remove the container when done:
+```bash
+sudo docker stop podcast
+sudo docker system prune
+```
+* `podcast` is the name of the container to stop
 # Audio Detection Service
 
 The **Audio Detection Service** is a Python-based utility designed to pinpoint the precise moment when a second audio snippet, extracted or recorded from a larger audio source, is played. Whether it's a snippet from a song, movie, video, or any other audio content, this service aims to determine the exact timestamp in the original audio where the provided snippet was played.
