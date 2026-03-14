@@ -1,4 +1,4 @@
-from server.app.Utils import ResponseHttp, AudioFormat
+from ..Utils import ResponseHttp, AudioFormat
 
 class AudioDetectionMiddleware:
     @staticmethod
