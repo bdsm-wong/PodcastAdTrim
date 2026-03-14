@@ -2,12 +2,12 @@ FROM python:3.13
 
 # Create non-root user
 RUN useradd --create-home appuser
-WORKDIR /home/appuser/app
+WORKDIR /home/appuser
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY --chown=appuser:appuser . .
+COPY --chown=appuser:appuser app .
 
 USER appuser
 

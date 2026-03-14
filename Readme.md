@@ -32,11 +32,11 @@ sudo docker images
 **Running the Container**
 
 ```bash
-sudo docker run -d -p 8090:8090 podcastadtrim_server:dev_v1
+sudo docker run -d -p 8090:8000 podcastadtrim_server:dev_v1
 ```
 
 * `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
-* `-p 8090:8090` maps the host's port 8090 (first argument) to the container's port 8090 (second argument).
+* `-p 8090:8000` maps the host's port 8090 (first argument) to the container's port 8000 (second argument).
 * `podcastadtrim_server:dev_v1` is the image name (update as needed).
 
 # Audio Detection Service
