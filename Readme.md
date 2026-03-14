@@ -1,18 +1,43 @@
-# Steps to Set Up and Run Docker Container on Server
-**Cloning Repository (only for the first time)**
+# Steps to Set Up and Run Docker Container on Ubuntu Server
+**Cloning/Updating Repository**
+
+Move to the Docker directory:
 ```bash
-cd ~/Docker 
+cd ~/Docker
+```
+
+Need to clone entire repository  (only for the first time):
+```bash
 git clone https://github.com/bdsm-wong/PodcastAdTrim -b dev
 ```
-`-b dev` clones the "dev" branch
+* `-b dev` clones the "dev" branch
+
+To update the repository with changes (after initial cloning):
+```bash
+git pull
+```
 
 **Building the Image**
-
 ```bash
 cd PodcastAdTrim/server`
 sudo docker build -t podcastadtrim_server:dev_v1 .
 ```
-`-t [name]:[version]` assigns a tag to the image, and `.` at the end builds the image at the current location
+* `-t [name]:[version]` assigns a tag to the image, and `.` at the end builds the image at the current location.
+
+```bash
+sudo docker images
+```
+* Lists the images present.
+
+**Running the Container**
+
+```bash
+sudo docker run -d -p 8090:8090 podcastadtrim_server:dev_v1
+```
+
+* `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
+* `-p 8090:8090` maps the host's port 8090 (first argument) to the container's port 8090 (second argument).
+* `podcastadtrim_server:dev_v1` is the image name (update as needed).
 
 # Audio Detection Service
 
