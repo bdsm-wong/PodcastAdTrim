@@ -1,7 +1,7 @@
 FROM python:3.13
 
 # upgrade pip, setuptools, and wheel
-#RUN pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip setuptools wheel
 
 # create system user for added security
 #RUN adduser --system nonroot
