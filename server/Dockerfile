@@ -4,9 +4,10 @@ FROM python:3.13
 #RUN pip install --upgrade pip setuptools wheel
 
 # create system user for added security
-RUN adduser --system nonroot
-USER nonroot
-WORKDIR /home/nonroot
+#RUN adduser --system nonroot
+#USER nonroot
+#WORKDIR /home/nonroot
+WORKDIR /app
 
 # copy all the files to the container
 COPY . .
