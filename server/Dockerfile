@@ -13,12 +13,12 @@ WORKDIR /app
 COPY . .
 
 # venv
-#ENV VIRTUAL_ENV=/home/nonroot/venv
+ENV VIRTUAL_ENV=/app/venv
 
 # python setup
-#RUN python -m venv $VIRTUAL_ENV
-#ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-#RUN export FLASK_APP=main.py
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN export FLASK_APP=main.py
 RUN pip install -r requirements.txt
 
 # define the port number the container should expose
