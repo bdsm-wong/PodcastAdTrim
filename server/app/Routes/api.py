@@ -30,3 +30,7 @@ def audio_storage():
 @app.route('/stored-audio-detection', methods=['POST'])
 def stored_audio_detection():
     return StoredAudioDetectionController.invokable(request=request)
+
+@app.route('/health')
+def health():
+    return "Healthy!"
