@@ -15,4 +15,8 @@ USER appuser
 # listening port
 EXPOSE 80
 
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:80"]
+# call gunicorn to serve the app
+CMD gunicorn "app:app" \
+    --workers ${GUNICORN_WORKERS} \
+    --timeout ${GUNICORN_TIMEOUT} \
+    --bind "0.0.0.0:80"
