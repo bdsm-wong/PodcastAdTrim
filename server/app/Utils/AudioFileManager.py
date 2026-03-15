@@ -1,13 +1,9 @@
-from dotenv import load_dotenv
 import numpy as np
 import logging
 import librosa
 
-#import os
-
 logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
 
-#load_dotenv()
 
 class AudioFileManager:
     """
@@ -24,7 +20,6 @@ class AudioFileManager:
     """
     @staticmethod
     def save_audio_matrix(audio_path, file_name, custom_path=False):
-        #storage_path = os.getenv("STORAGE_PATH") + file_name if not custom_path else file_name
         storage_path = "./storage/" + file_name if not custom_path else file_name
         try:
             audio_matrix, sample_rate = librosa.load(path=audio_path, sr=None)
@@ -45,7 +40,6 @@ class AudioFileManager:
         
     @staticmethod
     def load_audio_matrix(file_name, custom_path=False):
-        #storage_path = os.getenv("STORAGE_PATH") + file_name if not custom_path else file_name
         storage_path = "./storage/" + file_name if not custom_path else file_name
         try:
             data = np.load(storage_path)
