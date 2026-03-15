@@ -9,5 +9,5 @@ services:
     ports:
       - ${HOST_PORT}:80
     volumes:
-      - ${STORAGE_PATH}:./storage
-      - ${LOG_PATH}:./log
+      - ${STORAGE_PATH}:/home/appuser/storage
+      - ${LOG_PATH}:/home/appuser/log

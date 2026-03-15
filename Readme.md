@@ -45,12 +45,14 @@ Check the status using:
 sudo docker ps
 ```
 
-To stop and remove the container when done:
+To stop and remove the image and container when done:
 ```bash
 sudo docker stop podcast
+sudo docker image rm podcastadtrim_server:dev_v1
 sudo docker system prune
 ```
 * `podcast` is the name of the container to stop
+* `podcastadtrim_server:dev_v1` is the name of the image to delete
 # Audio Detection Service
 
 The **Audio Detection Service** is a Python-based utility designed to pinpoint the precise moment when a second audio snippet, extracted or recorded from a larger audio source, is played. Whether it's a snippet from a song, movie, video, or any other audio content, this service aims to determine the exact timestamp in the original audio where the provided snippet was played.
