@@ -3,7 +3,7 @@ name: podcast_ad_trim
 services:
   flask:
     build: .
-    #restart: always
+    restart: unless-stopped
     env_file:
       - .env
     ports:
@@ -17,3 +17,4 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    #TODO - add check to reboot if updates to base image
