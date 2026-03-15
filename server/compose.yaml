@@ -3,7 +3,7 @@ name: podcast_ad_trim
 services:
   flask:
     build: .
-    restart: always
+    #restart: always
     env_file:
       - .env
     ports:
