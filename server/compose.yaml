@@ -1,7 +1,7 @@
 name: podcast_ad_trim
 
 services:
-  web:
+  flask:
     build: .
     restart: always
     env_file:
@@ -10,4 +10,10 @@ services:
       - ${HOST_PORT}:80
     volumes:
       - ${STORAGE_PATH}:/home/appuser/storage
-      - ${LOG_PATH}:/home/appuser/log
+      - ${LOG_FILE}:/home/appuser/audio_detection_service.log
+    healthcheck:
+      test: ["CMD-SHELL","curl -f http://localhost:80/health || exit 1"]
+      start_interval: 5s
+      interval: 30s
+      timeout: 10s
+      retries: 3
