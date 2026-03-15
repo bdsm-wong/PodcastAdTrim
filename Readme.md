@@ -43,12 +43,10 @@ sudo docker ps -a
 **Stopping/Removing the Container**
 
 ```bash
-sudo docker compose down
-sudo docker image rm podcast_ad_trim-flask:latest
-sudo docker system prune
+sudo docker compose down --rmi all
 ```
 * Must call `compose` from root directory of repo (same location as compose.yaml file).
-* `podcast_ad_trim-flask:latest` is the name of the image to delete.
+* `--rmi all` removes all images associated with the container so they can be rebuilt from scratch.
 
 # Audio Detection Service
 
