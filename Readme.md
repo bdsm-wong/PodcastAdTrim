@@ -1,4 +1,4 @@
-# Steps to Set Up and Run Docker Container on Ubuntu Server
+# Steps to Set Up and Run Docker Container
 **Cloning/Updating Repository**
 
 Move to the Docker directory:
@@ -10,49 +10,46 @@ Need to clone entire repository  (only for the first time):
 ```bash
 git clone https://github.com/bdsm-wong/PodcastAdTrim -b dev
 ```
-* `-b dev` clones the "dev" branch
+* `-b dev` clones the "dev" branch.  Omit to clone the default branch ("main").
 
 To update the repository with changes (after initial cloning):
 ```bash
 git pull
 ```
+* Can call from anywhere within the cloned repo directory.
 
-**Building the Image**
+**Starting the Container**
+
 ```bash
-cd PodcastAdTrim/server`
-sudo docker build -t podcastadtrim_server:dev_v1 .
+cd PodcastAdTrim
+sudo docker compose up -d
 ```
-* `-t [name]:[version]` assigns a tag to the image, and `.` at the end builds the image at the current location.
+* `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
+* Must call `compose` from root directory of repo (same location as compose.yaml file).
+
+Show all images:
 
 ```bash
 sudo docker images
 ```
-* Lists the images present.
 
-**Starting/Stopping the Container**
+Check the status of containers using:
 
 ```bash
-sudo docker run -d -p 8090:80 --name podcast podcastadtrim_server:dev_v1
+sudo docker ps -a
 ```
+* `-a` shows all processes (including stopped/faulted containers)
 
-* `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
-* `-p 8090:80` maps the host's port 8090 (first argument) to the container's port 80 (second argument).
-* `--name podcast` assigns a short name to the container
-* `podcastadtrim_server:dev_v1` is the image name (update as needed).
+**Stopping/Removing the Container**
 
-Check the status using:
 ```bash
-sudo docker ps
-```
-
-To stop and remove the image and container when done:
-```bash
-sudo docker stop podcast
-sudo docker image rm podcastadtrim_server:dev_v1
+sudo docker compose down
+sudo docker image rm podcast_ad_trim-flask:latest
 sudo docker system prune
 ```
-* `podcast` is the name of the container to stop
-* `podcastadtrim_server:dev_v1` is the name of the image to delete
+* Must call `compose` from root directory of repo (same location as compose.yaml file).
+* `podcast_ad_trim-flask:latest` is the name of the image to delete.
+
 # Audio Detection Service
 
 The **Audio Detection Service** is a Python-based utility designed to pinpoint the precise moment when a second audio snippet, extracted or recorded from a larger audio source, is played. Whether it's a snippet from a song, movie, video, or any other audio content, this service aims to determine the exact timestamp in the original audio where the provided snippet was played.
