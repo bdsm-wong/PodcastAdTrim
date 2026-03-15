@@ -4,7 +4,7 @@ class AudioStorageMiddleware:
     @staticmethod
     def invokable(request):
         try:
-            # Check if both "file_audio" is present
+            # Check if "file_audio" is present
             if 'file_audio' not in request.files:
                 return ResponseHttp.error_message_dictionary(message='"file_audio" file is required.')
 
@@ -14,7 +14,7 @@ class AudioStorageMiddleware:
                 return ResponseHttp.error_message_dictionary(message='Invalid format for "file_audio". Supported formats are: mp3, wav, m4a, ogg.')
 
             # Validate name_full_audio
-            name_audio = request.form.get('name_full_audio')
+            name_audio = request.form.get('name_audio')
             if name_audio is None or not isinstance(name_audio, str):
                 return ResponseHttp.error_message_dictionary(message='Invalid or missing "name_audio". It should be a string.')
 
