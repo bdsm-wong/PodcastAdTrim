@@ -151,8 +151,9 @@ The response is a numeric value representing the time in seconds where the highe
 
 This endpoint stores the complete audio on the server for future queries. The required parameters are:
 
-- `name_full_audio`: A unique name for the audio to be stored in the system. (Type: String)
-- `full_audio`: The complete audio to be saved in the system for later analysis. (Accepted formats: .mp3, .m4a, .ogg, .wav)
+- `is_frag`: Flag indicating whether file is a fragment or full audio (Default: False)
+- `name_audio`: A unique name for the audio to be stored in the system. (Type: String)
+- `file_audio`: The complete audio to be saved in the system for later analysis. (Accepted formats: .mp3, .m4a, .ogg, .wav)
 
 **Response:**
 The response confirms the successful file storage on the server.
