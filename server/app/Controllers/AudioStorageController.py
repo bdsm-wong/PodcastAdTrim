@@ -6,7 +6,7 @@ import io
 class AudioStorageController:
     """
         {
-            is_frag: bool (default=False means this is a full file),
+            type_audio: string (file type - 'full' or 'frag'),
             name_audio: string (name of how the file will be saved in the storage directory),
             file_audio: audio_file
         }
@@ -16,12 +16,7 @@ class AudioStorageController:
         try:
             #TODO - record elapsed time to process the file
             data = request.form.to_dict()
-            print(data)
-            name_audio = f"{data.get('name_audio')}.npz"
-            if data.get('is_frag'):
-                storage_path = "frag/" + name_audio
-            else:
-                storage_path = "full/" + name_audio
+            storage_path = f"{data.get('type_audio')}/{data.get('name_audio')}.npz"
 
             file_audio = request.files['file_audio']
             audio_data = io.BytesIO(file_audio.read())
