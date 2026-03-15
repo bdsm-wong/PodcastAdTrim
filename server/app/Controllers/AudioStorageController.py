@@ -16,6 +16,7 @@ class AudioStorageController:
         try:
             #TODO - record elapsed time to process the file
             data = request.form.to_dict()
+            print(data)
             name_audio = f"{data.get('name_audio')}.npz"
             if data.get('is_frag'):
                 storage_path = "frag/" + name_audio
