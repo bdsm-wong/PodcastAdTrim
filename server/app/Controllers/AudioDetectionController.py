@@ -29,21 +29,28 @@ class AudioDetectionController:
             min_average_fragment_amplitude = data.get('min_average_fragment_amplitude', 0)
             max_average_fragment_amplitude = data.get('max_average_fragment_amplitude', 1)
 
+            # Generate or look up file name for "full_audio"
             file_full_audio = request.files['full_audio']
-            full_audio_data = io.BytesIO(file_full_audio.read())
-            with tempfile.NamedTemporaryFile(delete=False) as temp_full_audio_file:
+            if file_full_audio is not None:     # Use file if present
+                full_audio_data = io.BytesIO(file_full_audio.read())
+                with tempfile.NamedTemporaryFile(delete=False) as temp_full_audio_file:
                     temp_full_audio_file.write(full_audio_data.read())
-                    temp_full_audio_file_name = temp_full_audio_file.name
+                    full_audio_file_name = temp_full_audio_file.name
+            else:       # Treat as a name if no file is passed in
+                full_audio_file_name = f"full/{data.get('full_audio')}.npz"
 
+            # Generate or look up file name for "audio_fragment"
             file_audio_fragment = request.files['audio_fragment']
-            audio_fragment = io.BytesIO(file_audio_fragment.read())
-            with tempfile.NamedTemporaryFile(delete=False) as temp_audio_fragment_file:
+            if file_audio_fragment is not None:     # Use file if present
+                audio_fragment = io.BytesIO(file_audio_fragment.read())
+                with tempfile.NamedTemporaryFile(delete=False) as temp_audio_fragment_file:
                     temp_audio_fragment_file.write(audio_fragment.read())
-                    temp_audio_fragment_file_name = temp_audio_fragment_file.name
-            
+                    audio_fragment_file_name = temp_audio_fragment_file.name
+            else:       # Treat as a name if no file is passed in
+                audio_fragment_file_name = f"frag/{data.get('audio_fragment')}.npz"
 
-            audio_processor = AudioProcessor(movie_audio_filename=temp_full_audio_file_name, 
-                                             sound_fragment_filename=temp_audio_fragment_file_name,
+            audio_processor = AudioProcessor(movie_audio_filename=full_audio_file_name,
+                                             sound_fragment_filename=audio_fragment_file_name,
                                              recorded_fragment_duration_min=recorded_fragment_duration_min,
                                              recorded_fragment_duration_max=recorded_fragment_duration_max,
                                              min_average_fragment_amplitude=min_average_fragment_amplitude,
