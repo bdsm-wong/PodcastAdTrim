@@ -2,3 +2,4 @@ __pycache__/
 storage/
 audio_detection_service.log
 .env
+.idea/
