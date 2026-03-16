@@ -12,7 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=appuser:appuser . .
 USER appuser
 
-# create subdirectories in storage volume
+# create storage volume and subdirectories
+RUN mkdir ./storage
 RUN mkdir ./storage/test1
 RUN mkdir ./storage/test2
 
