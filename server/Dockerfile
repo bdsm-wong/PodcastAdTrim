@@ -13,8 +13,8 @@ COPY --chown=appuser:appuser . .
 USER appuser
 
 # create subdirectories in storage volume
-RUN mkdir storage/test1
-RUN mkdir storage/test2
+RUN mkdir ./storage/test1
+RUN mkdir ./storage/test2
 
 # create log files
 RUN touch test.log
