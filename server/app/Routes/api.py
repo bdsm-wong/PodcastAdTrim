@@ -9,7 +9,7 @@ def before_request():
     endpoint_middlewares = {
         'audio_detection': (OptionalInputMiddleware, AudioDetectionMiddleware),
         'audio_storage': (AudioStorageMiddleware,),
-        'stored_audio_detection': (OptionalInputMiddleware, StoredAudioDetectionMiddleware)
+        'stored_audio_detection': (OptionalInputMiddleware, AudioDetectionMiddleware)
     }
     endpoint = request.endpoint
     middlewares = endpoint_middlewares.get(endpoint, ())
@@ -29,7 +29,7 @@ def audio_storage():
 
 @app.route('/stored-audio-detection', methods=['POST'])
 def stored_audio_detection():
-    return StoredAudioDetectionController.invokable(request=request)
+    return AudioDetectionController.invokable(request=request)
 
 @app.route('/health')
 def health():
