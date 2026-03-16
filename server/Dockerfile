@@ -12,6 +12,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=appuser:appuser . .
 USER appuser
 
+# create subdirectories in storage volume
+RUN mkdir storage/test1
+RUN mkdir storage/test2
+
+# create log files
+RUN touch test.log
+
 # listening port
 EXPOSE 80
 
