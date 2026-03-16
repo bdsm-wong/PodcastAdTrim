@@ -2,7 +2,7 @@ from flask import jsonify
 import tempfile
 import io
 from ..Service import AudioProcessor
-from ..Utils import ResponseHttp
+from ..Utils import ResponseHttp,AudioFormat
 
 class AudioDetectionController:
     """
@@ -29,25 +29,33 @@ class AudioDetectionController:
             min_average_fragment_amplitude = data.get('min_average_fragment_amplitude', 0)
             max_average_fragment_amplitude = data.get('max_average_fragment_amplitude', 1)
 
-            # Generate or look up file name for "full_audio"
-            file_full_audio = request.files['full_audio']
-            if file_full_audio is not None:     # Use file if present
-                full_audio_data = io.BytesIO(file_full_audio.read())
-                with tempfile.NamedTemporaryFile(delete=False) as temp_full_audio_file:
-                    temp_full_audio_file.write(full_audio_data.read())
-                    full_audio_file_name = temp_full_audio_file.name
-            else:       # Treat as a name if no file is passed in
-                full_audio_file_name = f"full/{data.get('full_audio')}.npz"
+            # Check if "full_audio" file or name is present
+            type_full_audio = AudioFormat.request_type(request, key='full_audio')
 
-            # Generate or look up file name for "audio_fragment"
-            file_audio_fragment = request.files['audio_fragment']
-            if file_audio_fragment is not None:     # Use file if present
-                audio_fragment = io.BytesIO(file_audio_fragment.read())
-                with tempfile.NamedTemporaryFile(delete=False) as temp_audio_fragment_file:
-                    temp_audio_fragment_file.write(audio_fragment.read())
-                    audio_fragment_file_name = temp_audio_fragment_file.name
-            else:       # Treat as a name if no file is passed in
-                audio_fragment_file_name = f"frag/{data.get('audio_fragment')}.npz"
+            # Generate or look up file name for "full_audio" depending on type
+            match type_full_audio:
+                case 'file':
+                    file_full_audio = request.files['full_audio']
+                    full_audio_data = io.BytesIO(file_full_audio.read())
+                    with tempfile.NamedTemporaryFile(delete=False) as temp_full_audio_file:
+                        temp_full_audio_file.write(full_audio_data.read())
+                        full_audio_file_name = temp_full_audio_file.name
+                case 'name':
+                    full_audio_file_name = f"full/{data.get('full_audio')}.npz"
+
+            # Check if "audio_fragment" file or name is present
+            type_audio_fragment = AudioFormat.request_type(request, key='audio_fragment')
+
+            # Generate or look up file name for "audio_fragment" depending on type
+            match type_audio_fragment:
+                case 'file':
+                    file_audio_fragment = request.files['audio_fragment']
+                    audio_fragment = io.BytesIO(file_audio_fragment.read())
+                    with tempfile.NamedTemporaryFile(delete=False) as temp_audio_fragment_file:
+                        temp_audio_fragment_file.write(audio_fragment.read())
+                        audio_fragment_file_name = temp_audio_fragment_file.name
+                case 'name':
+                    audio_fragment_file_name = f"frag/{data.get('audio_fragment')}.npz"
 
             audio_processor = AudioProcessor(movie_audio_filename=full_audio_file_name,
                                              sound_fragment_filename=audio_fragment_file_name,

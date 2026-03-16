@@ -5,38 +5,42 @@ class AudioDetectionMiddleware:
     def invokable(request):
         try:
             # Check if "full_audio" file or name is present
-            file_full_audio = request.files['full_audio']
-            name_full_audio = request.form.get('full_audio')
-            if file_full_audio is None and name_full_audio is None:
-                return ResponseHttp.error_message_dictionary(
-                    message='"full_audio" file or name is required.')
+            type_full_audio = AudioFormat.request_type(request,key='full_audio')
 
-            # Validate "full_audio"
-            if file_full_audio is not None:     # Use file if present
-                if not AudioFormat.validate_extension(file_full_audio.filename):
+            # Validate data depending on type
+            match type_full_audio:
+                case 'file':
+                    file_full_audio = request.files['full_audio']
+                    if not AudioFormat.validate_extension(file_full_audio.filename):
+                        return ResponseHttp.error_message_dictionary(
+                            message='Invalid format for "full_audio". Supported formats are: mp3, wav, m4a, ogg.')
+                case 'name':
+                    name_full_audio = request.form.get('full_audio')
+                    if not isinstance(name_full_audio, str):
+                        return ResponseHttp.error_message_dictionary(
+                            message='If "full_audio" is not a file, it must be a string.')
+                case _:
                     return ResponseHttp.error_message_dictionary(
-                        message='Invalid format for "full_audio". Supported formats are: mp3, wav, m4a, ogg.')
-            else:       # Treat as a name if no file is passed in
-                if not isinstance(name_full_audio, str):
-                    return ResponseHttp.error_message_dictionary(
-                        message='If "full_audio" is not a file, it must be a string.')
+                        message='"full_audio" file or name is required.')
 
             # Check if "audio_fragment" file or name is present
-            file_audio_fragment = request.files['audio_fragment']
-            name_audio_fragment = request.form.get('audio_fragment')
-            if file_audio_fragment is None and name_audio_fragment is None:
-                return ResponseHttp.error_message_dictionary(
-                    message='"audio_fragment" file or name is required.')
+            type_audio_fragment = AudioFormat.request_type(request, key='audio_fragment')
 
-            # Validate "audio_fragment"
-            if file_audio_fragment is not None:     # Use file if present
-                if not AudioFormat.validate_extension(file_audio_fragment.filename):
+            # Validate data depending on type
+            match type_audio_fragment:
+                case 'file':
+                    file_audio_fragment = request.files['audio_fragment']
+                    if not AudioFormat.validate_extension(file_audio_fragment.filename):
+                        return ResponseHttp.error_message_dictionary(
+                            message='Invalid format for "audio_fragment". Supported formats are: mp3, wav, m4a, ogg.')
+                case 'name':
+                    name_audio_fragment = request.form.get('audio_fragment')
+                    if not isinstance(name_audio_fragment, str):
+                        return ResponseHttp.error_message_dictionary(
+                            message='If "audio_fragment" is not a file, it must be a string.')
+                case _:
                     return ResponseHttp.error_message_dictionary(
-                        message='Invalid format for "audio_fragment". Supported formats are: mp3, wav, m4a, ogg.')
-            else:       # Treat as a name if no file is passed in
-                if not isinstance(name_audio_fragment, str):
-                    return ResponseHttp.error_message_dictionary(
-                        message='If "audio_fragment" is not a file, it must be a string.')
+                        message='"audio_fragment" file or name is required.')
 
             return {'error': False}
         except Exception as e:
