@@ -32,7 +32,10 @@ class AudioFileManager:
             audio_duration = librosa.get_duration(path=audio_path, sr=sample_rate)
 
             # Create any missing subdirectories
-            os.makedirs(storage_path, exist_ok=True)
+            # Remove "fileName.npz" so we don't create that as a directory
+            last_slash = storage_path.rfind("/")
+            storage_dirs = storage_path[:last_slash]
+            os.makedirs(storage_dirs, exist_ok=True)
 
             np.savez(storage_path,
                      audio_matrix=audio_matrix,

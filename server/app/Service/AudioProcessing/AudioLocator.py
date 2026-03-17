@@ -33,6 +33,7 @@ class AudioLocator:
             max_correlation_index = self.max_corr_ary.index(max(self.max_corr_ary))
             relative_peak_sec = self.peak_sec_ary[max_correlation_index]
             
+            #TODO - stitch together all correlate sub-matrices and trim to full_audio length
             self.exact_second = (self.__audio_duration * max_correlation_index / num_parts) + relative_peak_sec
             self.max_correlation = self.max_corr_ary[max_correlation_index]
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
