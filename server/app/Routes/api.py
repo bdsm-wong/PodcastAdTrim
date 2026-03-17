@@ -1,15 +1,14 @@
 from flask import request
 from .. import app
-from ..Controllers import AudioDetectionController, AudioStorageController, StoredAudioDetectionController
-from ..Middleware import AudioDetectionMiddleware, AudioStorageMiddleware, StoredAudioDetectionMiddleware, OptionalInputMiddleware
+from ..Controllers import AudioDetectionController, AudioStorageController
+from ..Middleware import AudioDetectionMiddleware, AudioStorageMiddleware, OptionalInputMiddleware
 from ..Utils import ResponseHttp
 
 @app.before_request
 def before_request():
     endpoint_middlewares = {
         'audio_detection': (OptionalInputMiddleware, AudioDetectionMiddleware),
-        'audio_storage': (AudioStorageMiddleware,),
-        'stored_audio_detection': (OptionalInputMiddleware, AudioDetectionMiddleware)
+        'audio_storage': (AudioStorageMiddleware,)
     }
     endpoint = request.endpoint
     middlewares = endpoint_middlewares.get(endpoint, ())
@@ -26,10 +25,6 @@ def audio_detection():
 @app.route('/audio-storage', methods=['POST'])
 def audio_storage():
     return AudioStorageController.invokable(request=request)
-
-@app.route('/stored-audio-detection', methods=['POST'])
-def stored_audio_detection():
-    return AudioDetectionController.invokable(request=request)
 
 @app.route('/health')
 def health():

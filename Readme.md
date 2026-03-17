@@ -65,7 +65,6 @@ The **Audio Detection Service** is a Python-based utility designed to pinpoint t
 - [What the Service Offers](#what-the-service-offers)
     - [Endpoint 1: `/audio-detection`](#endpoint-1-audio-detection)
     - [Endpoint 2: `/audio-storage`](#endpoint-2-audio-storage)
-    - [Endpoint 3: `/stored-audio-detection`](#endpoint-3-stored-audio-detection)
     - [Optional Variables](#optional-variables)
         - [Validating the Audio Fragment](#validating-the-audio-fragment)
         - [Variable for Displaying Content](#variable-for-displaying-content)
@@ -80,7 +79,7 @@ Welcome to AudioTimestamp-Detective – a Python-based audio analysis service de
 
 **Key Features:**
 1. **Precision Detection**: Quickly find the exact second when a specific audio fragment is present.
-2. **Flexible Endpoints**: Three endpoints cater to various use cases, from real-time detection to stored audio analysis.
+2. **Flexible Endpoints**: Two endpoints cater to various use cases, from real-time detection to stored audio analysis.
 3. **Optional Parameters**: Fine-tune your analysis with optional variables for enhanced accuracy.
 4. **Easy Integration**: Seamlessly integrate this service into your applications using simple HTTP requests.
 
@@ -147,7 +146,7 @@ The response is a numeric value representing the time in seconds where the highe
 
 ### Endpoint 2: `/audio-storage`
 
-This endpoint stores the complete audio on the server for future queries. The required parameters are:
+This endpoint stores a full or partial audio file on the server for future queries. The required parameters are:
 
 - `type_audio`: 'frag' if this is a snippet/partial file or 'full' if this is the full audio clip (Type: String)
 - `name_audio`: A unique name for the audio to be stored in the system. (Type: String)
@@ -162,23 +161,6 @@ The response confirms the successful file storage on the server.
 }
 ```
 
-### Endpoint 3: `/stored-audio-detection`
-
-This endpoint uses the audio previously stored on the server to find the exact moment a specific fragment is played. The required parameters are:
-
-- `name_full_audio`: The unique name of the audio stored in the system (same name used in Endpoint 2). (Type: String)
-- `audio_fragment`: The audio fragment whose position is being sought. (Accepted formats: .mp3, .m4a, .ogg, .wav)
-
-**Response:**
-The response is similar to that of Endpoint 1, providing the time in seconds where the highest correlation was detected.
-```json
-{
-    "error": false,
-    "message": {
-        "location_in_seconds": 120.26713435374151
-    }
-}
-```
 
 ### Optional Variables
 
