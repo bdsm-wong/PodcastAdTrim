@@ -9,64 +9,47 @@ class AudioLoader:
         self.__movie_audio_filename = movie_audio_filename
         self.__sound_fragment_filename = sound_fragment_filename
         self.__custom_path = custom_path
-        self.audio_matrix = None
-        self.sample_rate = None
-        self.audio_duration = None
-        self.audio_fragment_matrix = None
-        self.fragment_audio_duration = None
+        self.full_matrix = AudioFileManager()
+        self.frag_matrix = AudioFileManager()
 
     def load_audio_data(self):
+        # Load/generate matrix for full audio
         if self.__movie_audio_filename.endswith(".npz"):
-            load_audio_data = self._load_npz_audio_data()
-        elif self.__movie_audio_filename and self.__sound_fragment_filename:
-            load_audio_data = self._load_normal_audio_data()
+            # Matrix already exists in storage.  Load it
+            load_full_data = self.full_matrix.load_audio_matrix(
+                file_name=self.__movie_audio_filename,
+                custom_path=self.__custom_path)
         else:
-            return {
-                "error": True,
-                "message": "Invalid combination of audio files provided.",
-            }
-        
-        if load_audio_data['error']: return load_audio_data
+            # Matrix doesn't yet exist.  Generate but don't save
+            load_full_data = self.full_matrix.generate_temp_matrix(
+                file_name=self.__movie_audio_filename,
+                custom_path=self.__custom_path)
 
-        try:
-            self.audio_fragment_matrix, _ = librosa.load(path=self.__sound_fragment_filename, sr=self.sample_rate)
-            self.fragment_audio_duration = librosa.get_duration(path=self.__sound_fragment_filename)
+        if load_full_data['error']: return load_full_data
 
-            return {"error": False, "message": "Data loading successful"}
-        except Exception as error:
-            logging.error(f'Error: {str(error)}')
-            return {
-                "error": True,
-                "message": f'Error loading fragment audio: {str(error)}',
-            }
+        # Load/generate matrix for audio fragment
+        if self.__sound_fragment_filename.endswith(".npz"):
+            # Matrix already exists in storage.  Load it
+            load_frag_data = self.frag_matrix.load_audio_matrix(
+                file_name=self.__sound_fragment_filename,
+                custom_path=self.__custom_path)
 
-    def _load_npz_audio_data(self):
-        try:
-            audio_data = AudioFileManager.load_audio_matrix(self.__movie_audio_filename, self.__custom_path)
-            if audio_data['error']:
-                return audio_data
+            # Sample rate must match for correlation to work correctly
+            if self.full_matrix.sample_rate != self.frag_matrix.sample_rate:
+                return {
+                    "error": True,
+                    "message": f'Full matrix sample rate ( \
+                        {str(self.full_matrix.sample_rate)} Hz) \
+                        must be equal to fragment matrix sample rate ( \
+                        {str(self.frag_matrix.sample_rate)} Hz)'
+                }
+        else:
+            # Since frag matrix doesn't yet exist, force it to use same sample rate as full
+            self.frag_matrix.sample_rate = self.full_matrix.sample_rate
 
-            self.audio_matrix = audio_data['message']['audio_matrix']
-            self.sample_rate = audio_data['message']['sample_rate']
-            self.audio_duration = audio_data['message']['audio_duration']
-            
-            return {"error": False, "message": "Data loading successful"}
-        except Exception as error:
-            logging.error(f'Error: {str(error)}')
-            return {
-                "error": True,
-                "message": f'Error loading audio matrix file: {str(error)}',
-            }
+            # Matrix doesn't yet exist.  Generate but don't save
+            load_frag_data = self.full_matrix.generate_temp_matrix(
+                file_name=self.__movie_audio_filename,
+                custom_path=self.__custom_path)
 
-    def _load_normal_audio_data(self):
-        try:
-            self.audio_matrix, self.sample_rate = librosa.load(path=self.__movie_audio_filename, sr=None)
-            self.audio_duration = librosa.get_duration(path=self.__movie_audio_filename, sr=self.sample_rate)
-
-            return {"error": False, "message": "Data loading successful"}
-        except Exception as error:
-            logging.error(f'Error: {str(error)}')
-            return {
-                "error": True,
-                "message": f'Error loading original audio: {str(error)}',
-            }
+        return load_frag_data
