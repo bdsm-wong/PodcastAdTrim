@@ -130,8 +130,13 @@ The **Audio Detection Service** provides three endpoints accessible through `POS
 
 This endpoint is responsible for finding the exact moment a specific audio fragment is played within a more extensive audio source. The required parameters are:
 
-- `full_audio`: The complete audio to be analyzed for the specific moment. (Accepted formats: .mp3, .m4a, .ogg, .wav)
-- `audio_fragment`: The audio fragment whose position is being sought. (Accepted formats: .mp3, .m4a, .ogg, .wav)
+- `full_audio`: The complete audio to be analyzed for the specific moment.
+  - Can pass file or path to cached data. 
+  - If passing a file, accepted formats are: .mp3, .m4a, .ogg, .wav
+  - Cached data is stored in `full` directory of volume referenced in `STORAGE_PATH` environment variable.
+  - For example, if path to file is: `{$STORAGE_PATH}/full/myFile.npz`, use `myfile` for this argument.  
+- `audio_fragment`: The audio fragment whose position is being sought.
+  - Like with `full_audio`, can pass file or path.  However, cached files are in the `frag` directory.  
 
 **Response:**
 The response is a numeric value representing the time in seconds where the highest correlation was detected, i.e., the exact moment the audio fragment was played.
