@@ -47,6 +47,6 @@ class AudioLoader:
             self.frag_matrix.sample_rate = self.full_matrix.sample_rate
 
             # Matrix doesn't yet exist.  Generate but don't save
-            load_frag_data = self.full_matrix.generate_temp_matrix(file_name=self.__movie_audio_filename)
+            load_frag_data = self.frag_matrix.generate_temp_matrix(file_name=self.__sound_fragment_filename)
 
         return load_frag_data
