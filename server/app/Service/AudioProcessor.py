@@ -21,7 +21,7 @@ class AudioProcessor:
         self._audio_loader = AudioLoader(movie_audio_filename=self._movie_audio_filename,
                                          sound_fragment_filename=self._sound_fragment_filename,
                                          custom_path=self._custom_path)
-        self._find_segment_audio = None
+        self._audio_locator = None
         self._total_execution_time = 0
 
         self._recorded_fragment_duration_min = recorded_fragment_duration_min
@@ -43,17 +43,17 @@ class AudioProcessor:
             if validate_fragment_audio['error']: return validate_fragment_audio
         
             # Find Position
-            audio_locator = AudioLocator(audio_loader=self._audio_loader)
+            self._audio_locator = AudioLocator(audio_loader=self._audio_loader)
             num_parts = int(os.getenv("NUM_PARTITIONS_CORRELATE", default=4))
-            self._find_segment_audio = audio_locator.find_segment(num_parts=num_parts)
-            if self._find_segment_audio['error']: return self._find_segment_audio
+            find_segment_audio = self._audio_locator.find_segment(num_parts=num_parts)
+            if find_segment_audio['error']: return find_segment_audio
 
             #TODO - save correlate matrix to file
 
             # ---- FINISH TIME ----
             total_execution_time_end = time.time()
             self._total_execution_time = total_execution_time_end - total_execution_time_start
-            logging.error(f'_find_segment_audio - AudioProcessor = {str(self._find_segment_audio)}')
+
             # Show elements
             return {
                 'error': False,
@@ -96,12 +96,12 @@ class AudioProcessor:
         return {'error': False}
     
     def _show_elements(self, show_elements_array):
-        elements = {'location_in_seconds': self._find_segment_audio.exact_second}
+        elements = {'location_in_seconds': self._audio_locator.exact_second}
         if 'total_execution_time' in show_elements_array:
             elements['total_execution_time'] = self._total_execution_time
 
         if 'location_in_minutes' in show_elements_array:
-            elements['location_in_minutes'] = get_minutes_and_seconds(self._find_segment_audio.exact_second)
+            elements['location_in_minutes'] = get_minutes_and_seconds(self._audio_locator.exact_second)
         
         if 'recorded_fragment_length' in show_elements_array:
             elements['recorded_fragment_length'] = self._audio_loader.frag_matrix.duration
