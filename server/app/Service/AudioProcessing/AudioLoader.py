@@ -36,6 +36,7 @@ class AudioLoader:
 
             # Sample rate must match for correlation to work correctly
             if self.full_matrix.sample_rate != self.frag_matrix.sample_rate:
+                #TODO - this error is returned when frag name doesn't exist in storage/frag
                 return {
                     "error": True,
                     "message": f'Full matrix sample rate ( \
