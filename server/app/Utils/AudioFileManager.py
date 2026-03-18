@@ -78,12 +78,11 @@ class AudioFileManager:
                 "message": f'Error loading audio matrix: {str(error)}',
             }
 
-    def generate_temp_matrix(self, file_name, custom_path=False):
-        storage_path = "./storage/" + file_name if not custom_path else file_name
+    def generate_temp_matrix(self, file_name):
         try:
             # Pass sample_rate in AND out in case it changes between init and method call
-            self.audio_matrix, self.sample_rate = librosa.load(path=storage_path, sr=self.sample_rate)
-            self.audio_duration = librosa.get_duration(path=storage_path, sr=self.sample_rate)
+            self.audio_matrix, self.sample_rate = librosa.load(path=file_name, sr=self.sample_rate)
+            self.audio_duration = librosa.get_duration(path=file_name, sr=self.sample_rate)
             return {
                 "error": False,
                 "message": 'Audio matrix generated successfully'

@@ -21,9 +21,7 @@ class AudioLoader:
                 custom_path=self.__custom_path)
         else:
             # Matrix doesn't yet exist.  Generate but don't save
-            load_full_data = self.full_matrix.generate_temp_matrix(
-                file_name=self.__movie_audio_filename,
-                custom_path=self.__custom_path)
+            load_full_data = self.full_matrix.generate_temp_matrix(file_name=self.__movie_audio_filename)
 
         if load_full_data['error']: return load_full_data
 
@@ -49,8 +47,6 @@ class AudioLoader:
             self.frag_matrix.sample_rate = self.full_matrix.sample_rate
 
             # Matrix doesn't yet exist.  Generate but don't save
-            load_frag_data = self.full_matrix.generate_temp_matrix(
-                file_name=self.__movie_audio_filename,
-                custom_path=self.__custom_path)
+            load_frag_data = self.full_matrix.generate_temp_matrix(file_name=self.__movie_audio_filename)
 
         return load_frag_data
