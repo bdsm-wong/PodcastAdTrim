@@ -32,9 +32,10 @@ class AudioLoader:
                 file_name=self.__sound_fragment_filename,
                 custom_path=self.__custom_path)
 
+            if load_frag_data['error']: return load_frag_data
+
             # Sample rate must match for correlation to work correctly
-            if self.full_matrix.sample_rate != self.frag_matrix.sample_rate:
-                #TODO - this error is returned when frag name doesn't exist in storage/frag
+            elif self.full_matrix.sample_rate != self.frag_matrix.sample_rate:
                 return {
                     "error": True,
                     "message": f'Full matrix sample rate ( \
@@ -48,5 +49,7 @@ class AudioLoader:
 
             # Matrix doesn't yet exist.  Generate but don't save
             load_frag_data = self.frag_matrix.generate_temp_matrix(file_name=self.__sound_fragment_filename)
+
+            if load_frag_data['error']: return load_frag_data
 
         return load_frag_data
