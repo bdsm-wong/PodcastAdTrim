@@ -96,10 +96,10 @@ class AudioProcessor:
         return {'error': False}
     
     def _show_elements(self, show_elements_array):
-        elements = {'location_in_seconds': 123}     # self._find_segment_audio.exact_second}
+        elements = {'location_in_seconds': self._find_segment_audio.exact_second}
         if 'total_execution_time' in show_elements_array:
             elements['total_execution_time'] = self._total_execution_time
-        
+
         if 'location_in_minutes' in show_elements_array:
             elements['location_in_minutes'] = get_minutes_and_seconds(self._find_segment_audio.exact_second)
         
