@@ -37,7 +37,7 @@ class AudioLocator:
             self.exact_second = (self.__audio_duration * max_correlation_index / num_parts) + relative_peak_sec
             self.max_correlation = self.max_corr_ary[max_correlation_index]
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
-
+            logging.error(f'exact second - AudioLocator = {self.exact_second}')
             return {"error": False,
                     "message": 'All correlations completed successfully'
                     }

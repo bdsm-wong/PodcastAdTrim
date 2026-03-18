@@ -53,7 +53,7 @@ class AudioProcessor:
             # ---- FINISH TIME ----
             total_execution_time_end = time.time()
             self._total_execution_time = total_execution_time_end - total_execution_time_start
-            
+            logging.error(f'exact second - AudioProcessor = {self._find_segment_audio.exact_second}')
             # Show elements
             return {
                 'error': False,
