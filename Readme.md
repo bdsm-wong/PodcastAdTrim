@@ -13,21 +13,21 @@ The **Audio Detection Service** is a Python-based utility designed to pinpoint t
         - [Configure Deployment Port](#configure-deployment-port)
         - [Run the Service](#run-the-service)
 - [How it Works](#how-it-works)
-- [What the Service Offers](#what-the-service-offers)
-      - [Endpoint 1: `/health`](#endpoint-1-health) 
-      - [Endpoint 2: `/audio-detection`](#endpoint-2-audio-detection)
-      - [Endpoint 3: `/audio-storage`](#endpoint-3-audio-storage)
-      - [Optional Variables](#optional-variables)
-          - [Validating the Audio Fragment](#validating-the-audio-fragment)
-          - [Variable for Displaying Content](#variable-for-displaying-content)
-          - [Example: Optional Variables](#example-optional-variables)
-          - [Example Response: Optional Variables](#example-response-optional-variables)
-          - [Create .env File](#create-env-file)
+    - [What the Service Offers](#what-the-service-offers)
+        - [Endpoint 1: `/health`](#endpoint-1-health) 
+        - [Endpoint 2: `/audio-detection`](#endpoint-2-audio-detection)
+        - [Endpoint 3: `/audio-storage`](#endpoint-3-audio-storage)
+        - [Optional Variables](#optional-variables)
+            - [Validating the Audio Fragment](#validating-the-audio-fragment)
+            - [Variable for Displaying Content](#variable-for-displaying-content)
+            - [Example: Optional Variables](#example-optional-variables)
+            - [Example Response: Optional Variables](#example-response-optional-variables)
+            - [Create .env File](#create-env-file)
 
 ## Getting Started
 ### Introduction
 
-Welcome to AudioTimestamp-Detective – a Python-based audio analysis service designed to precisely locate the moment a specific audio fragment occurs within a larger audio source. Whether you're working with music, movies, or any audio content, this service simplifies the process of identifying when a particular sound occurs.
+Welcome to PodcastAdTrim – a Python-based audio analysis service designed to precisely locate the moment a specific audio fragment occurs within a larger audio source. Whether you're working with music, movies, or any audio content, this service simplifies the process of identifying when a particular sound occurs.
 
 **Key Features:**
 1. **Precision Detection**: Quickly find the exact second when a specific audio fragment is present.

@@ -1,5 +1,13 @@
 ## Table of Contents
 - [Testing Communications](#testing-communications)
+  - [Pinging the Server](#pinging-the-server)
+  - [Endpoint 1: `/health`](#endpoint-1-health)
+  - [Endpoint 2: `/audio-detection`](#endpoint-2-audio-detection)
+    - [Passing audio files directly](#passing-audio-files-directly)
+    - [Referencing stored matrix files](#referencing-stored-matrix-files)
+  - [Endpoint 3: `/audio-storage`](#endpoint-3-audio-storage)
+    - [Storing a full audio file](#storing-a-full-audio-file)
+    - [Storing a partial audio file](#storing-a-partial-audio-file)
 
 ## Testing Communications
 Prior to setting up the client-side Python virtual environment, the server endpoints can be manually tested from the command line.
@@ -19,7 +27,7 @@ curl http://myserver:port/health
 * The reply will simply be `Healthy!` if the container is reachable.
 
 ### Endpoint 2: `/audio-detection`
-#### Passing audio files directly (not stored matrix files)
+#### Passing audio files directly
 ```bash
 curl -F "full_audio=@/path/to/file/myPodcast.mp3" -F "audio_fragment=@/path/to/file/myAd.mp3" http://myserver:port/audio-detection
 ```
@@ -52,7 +60,7 @@ curl -F "full_audio=myPodcast" -F "audio_fragment=myAd" http://myserver:port/aud
 ```bash
 curl -F "name_audio=myPodcast" -F "file_audio=@/path/to/file/myPodcast.mp3" -F "type_audio=full" http://myserver:port/audio-storage
 ```
-* The `file_audio` parameter works as described in [Passing audio files directly](#passing-audio-files-directly-not-stored-matrix-files)
+* The `file_audio` parameter works as described in [Passing audio files directly](#passing-audio-files-directly)
 * The file will be stored at `{STORAGE_PATH}/full/myPodcast.npz`
 #### Storing a partial audio file
 ```bash
