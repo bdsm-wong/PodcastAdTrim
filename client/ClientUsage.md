@@ -14,7 +14,7 @@ ping myserver
 curl http://myserver:port/health
 ```
 * Replace `myserver` with the server's domain name.  Use `localhost` if calling from the server itself.
-* Replace `port` with the port number configured in the `.env` file (refer to [server setup guide](server/ServerSetup.md)).
+* Replace `port` with the port number configured in the `.env` file (refer to [server setup guide](/server/ServerSetup.md)).
 * This endpoint does not require any parameters.
 * The reply will simply be `Healthy!` if the container is reachable.
 
