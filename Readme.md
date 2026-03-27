@@ -1,52 +1,3 @@
-# Steps to Set Up and Run Docker Container
-**Cloning/Updating Repository**
-
-Move to the Docker directory:
-```bash
-cd ~/Docker
-```
-
-Need to clone entire repository  (only for the first time):
-```bash
-git clone https://github.com/bdsm-wong/PodcastAdTrim -b dev
-```
-* `-b dev` clones the "dev" branch.  Omit to clone the default branch ("main").
-
-To update the repository with changes (after initial cloning):
-```bash
-git pull
-```
-* Can call from anywhere within the cloned repo directory.
-
-**Starting the Container**
-
-```bash
-cd PodcastAdTrim
-sudo docker compose up -d
-```
-* `-d` runs the container in 'detached' mode (in background).  Omit to leave in foreground.
-* Must call `compose` from root directory of repo (same location as compose.yaml file).
-
-Show all images:
-
-```bash
-sudo docker images
-```
-
-Check the status of containers using:
-
-```bash
-sudo docker ps -a
-```
-* `-a` shows all processes (including stopped/faulted containers)
-
-**Stopping/Removing the Container**
-
-```bash
-sudo docker compose down --rmi all
-```
-* Must call `compose` from root directory of repo (same location as compose.yaml file).
-* `--rmi all` removes all images associated with the container so they can be rebuilt from scratch.
 
 # Audio Detection Service
 
@@ -63,14 +14,15 @@ The **Audio Detection Service** is a Python-based utility designed to pinpoint t
         - [Run the Service](#run-the-service)
 - [How it Works](#how-it-works)
 - [What the Service Offers](#what-the-service-offers)
-    - [Endpoint 1: `/audio-detection`](#endpoint-1-audio-detection)
-    - [Endpoint 2: `/audio-storage`](#endpoint-2-audio-storage)
-    - [Optional Variables](#optional-variables)
-        - [Validating the Audio Fragment](#validating-the-audio-fragment)
-        - [Variable for Displaying Content](#variable-for-displaying-content)
-        - [Example: Optional Variables](#example-optional-variables)
-        - [Example Response: Optional Variables](#example-response-optional-variables)
-        - [Create .env File](#create-env-file)
+      - [Endpoint 1: `/health`](#endpoint-1-health) 
+      - [Endpoint 2: `/audio-detection`](#endpoint-2-audio-detection)
+      - [Endpoint 3: `/audio-storage`](#endpoint-3-audio-storage)
+      - [Optional Variables](#optional-variables)
+          - [Validating the Audio Fragment](#validating-the-audio-fragment)
+          - [Variable for Displaying Content](#variable-for-displaying-content)
+          - [Example: Optional Variables](#example-optional-variables)
+          - [Example Response: Optional Variables](#example-response-optional-variables)
+          - [Create .env File](#create-env-file)
 
 ## Getting Started
 ### Introduction
@@ -84,36 +36,10 @@ Welcome to AudioTimestamp-Detective – a Python-based audio analysis service de
 4. **Easy Integration**: Seamlessly integrate this service into your applications using simple HTTP requests.
 
 ### Installation
-To set up AudioTimestamp-Detective, follow these steps:
+To set up PodcastAdTrim on a server, follow the [server setup guide](server/ServerSetup.md).
 
-#### Install Dependencies
-```bash
-pip3 install -r requirements.txt
-```
-Make sure you are using `Python3` and `pip3`. Additionally, ensure that the version of librosa in requirements.txt is the specified version or higher.
+To install and use client-side tools, follow the [client usage guide](client/ClientUsage.md)
 
-#### Configure Audio File Formats
-- For `GNU/Linux` systems, install ffmpeg and upgrade librosa for audio formats (.mp3, .wav, .m4a):
-    ```bash
-    sudo apt install ffmpeg
-    pip3 install --upgrade librosa
-    ```
-- For macOS or Windows, you might need to install ffmpeg.
-
-#### Create .env File
-- Copy .env.example and create a .env file. Set the following variables:
-    - `STORAGE_PATH`: Absolute path to store matrices of converted audios.
-    - `NUM_PARTITIONS_CORRELATE` (Optional): Number of partitions in the source audio matrix. Default is 4.
-
-#### Configure Deployment Port
-Edit main.py to set the desired deployment port. You can configure the service for deployment with Apache, Nginx, or Gunicorn.
-
-#### Run the Service
-Execute the following command to start the service:
-```bash
-python3 main.py
-```
-Make HTTP requests to the endpoints: http://domain:port/endpoint.
 ## How it Works
 
 1. **Audio Source**: You provide a complete audio file, representing the entire sound source, such as a song, movie, or video.
@@ -126,7 +52,12 @@ Make HTTP requests to the endpoints: http://domain:port/endpoint.
 
 The **Audio Detection Service** provides three endpoints accessible through `POST` requests, each serving a specific purpose:
 
-### Endpoint 1: `/audio-detection`
+### Endpoint 1: `/health`
+
+* This endpoint is used periodically by the Docker Flask service to verify that the network is available.  
+* Refer to [client usage guide](client/ClientUsage.md) for ad-hoc usage.
+
+### Endpoint 2: `/audio-detection`
 
 This endpoint is responsible for finding the exact moment a specific audio fragment is played within a more extensive audio source. The required parameters are:
 
@@ -149,7 +80,7 @@ The response is a numeric value representing the time in seconds where the highe
 }
 ```
 
-### Endpoint 2: `/audio-storage`
+### Endpoint 3: `/audio-storage`
 
 This endpoint stores a full or partial audio file on the server for future queries. The required parameters are:
 
