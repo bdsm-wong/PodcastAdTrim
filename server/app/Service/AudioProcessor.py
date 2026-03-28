@@ -39,7 +39,7 @@ class AudioProcessor:
             if validate_fragment_audio['error']: return validate_fragment_audio
         
             # Find Position
-            self._audio_locator = AudioLocator(audio_loader=self._audio_loader)
+            self._audio_locator = AudioLocator(audio_loader=self._audio_loader, logger=self._logger)
             num_parts = int(os.getenv("NUM_PARTITIONS_CORRELATE", default=4))
             find_segment_audio = self._audio_locator.find_segment(num_parts=num_parts)
             if find_segment_audio['error']: return find_segment_audio
