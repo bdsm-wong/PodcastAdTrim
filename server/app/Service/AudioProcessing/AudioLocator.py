@@ -3,11 +3,13 @@ import numpy as np
 
 class AudioLocator:
 
-    def __init__(self, audio_loader):
+    def __init__(self, audio_loader, logger):
         # Array results from each part
         self.corr_matrix_ary = []
         self.peak_sec_ary = []
         self.max_corr_ary = []
+
+        self.__logger = logger
 
         # Map audio info to internal variables
         self.__audio_matrix = audio_loader.full_matrix.audio_matrix
@@ -22,6 +24,8 @@ class AudioLocator:
     def find_segment(self, num_parts = 4):
         try:
             part_length = len(self.__audio_matrix) // num_parts
+
+            self.__logger.info(f'Part length: {str(part_length)}')
             #TODO - test whether there are performance improvements when processing matrix in parts
             #TODO - if there are performance gains, are there discontinuities in the correlate matrix at the boundaries?
             #TODO - if no performance gains, just process as single matrix and remove ENV variable
