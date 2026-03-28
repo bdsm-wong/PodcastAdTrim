@@ -20,11 +20,11 @@ def before_request():
     
 @app.route('/audio-detection', methods=['POST'])
 def audio_detection():
-    return AudioDetectionController.invokable(request=request)
+    return AudioDetectionController.invokable(request=request,logger=app.logger)
 
 @app.route('/audio-storage', methods=['POST'])
 def audio_storage():
-    return AudioStorageController.invokable(request=request)
+    return AudioStorageController.invokable(request=request,logger=app.logger)
 
 @app.route('/health')
 def health():

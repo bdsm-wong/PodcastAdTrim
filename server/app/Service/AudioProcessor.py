@@ -2,25 +2,21 @@ import time
 from .AudioProcessing import AudioLoader
 from .AudioProcessing import AudioLocator
 from ..Utils import AudioThresholdValidator, get_minutes_and_seconds
-import logging
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
-
 class AudioProcessor:
-    def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, custom_path=False,
+    def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, logger=None,
                 recorded_fragment_duration_min = 0, recorded_fragment_duration_max = None,
                 min_average_fragment_amplitude = 0, max_average_fragment_amplitude = 1):
         self._movie_audio_filename = movie_audio_filename
         self._sound_fragment_filename = sound_fragment_filename
-        self._custom_path = custom_path
+        self._logger = logger
 
         self._audio_loader = AudioLoader(movie_audio_filename=self._movie_audio_filename,
-                                         sound_fragment_filename=self._sound_fragment_filename,
-                                         custom_path=self._custom_path)
+                                         sound_fragment_filename=self._sound_fragment_filename)
         self._audio_locator = None
         self._total_execution_time = 0
 
@@ -63,7 +59,7 @@ class AudioProcessor:
             }
         
         except Exception as error:
-            logging.error(f'Error: {str(error)}')
+            self._logger.error(str(error))
             return {
                 "error": True,
                 "message": f'Error loading an search audio: {str(error)}',

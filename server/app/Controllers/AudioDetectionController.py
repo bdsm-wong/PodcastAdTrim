@@ -17,7 +17,7 @@ class AudioDetectionController:
         }
     """
     @staticmethod
-    def invokable(request):
+    def invokable(request,logger):
         try:
             data = request.form.to_dict()
             show_data = data.get('show', [])
@@ -59,6 +59,7 @@ class AudioDetectionController:
 
             audio_processor = AudioProcessor(movie_audio_filename=full_audio_file_name,
                                              sound_fragment_filename=audio_fragment_file_name,
+                                             logger=logger,
                                              recorded_fragment_duration_min=recorded_fragment_duration_min,
                                              recorded_fragment_duration_max=recorded_fragment_duration_max,
                                              min_average_fragment_amplitude=min_average_fragment_amplitude,

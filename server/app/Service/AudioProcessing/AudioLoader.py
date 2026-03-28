@@ -1,24 +1,19 @@
 from ...Utils import AudioFileManager
 import librosa
-import logging
-
-logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
 
 class AudioLoader:
-    def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, custom_path=False):
+    def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, logger=None):
         self.__movie_audio_filename = movie_audio_filename
         self.__sound_fragment_filename = sound_fragment_filename
-        self.__custom_path = custom_path
-        self.full_matrix = AudioFileManager()
-        self.frag_matrix = AudioFileManager()
+        self.__logger = logger
+        self.full_matrix = AudioFileManager(logger=logger)
+        self.frag_matrix = AudioFileManager(logger=logger)
 
     def load_audio_data(self):
         # Load/generate matrix for full audio
         if self.__movie_audio_filename.endswith(".npz"):
             # Matrix already exists in storage.  Load it
-            load_full_data = self.full_matrix.load_audio_matrix(
-                file_name=self.__movie_audio_filename,
-                custom_path=self.__custom_path)
+            load_full_data = self.full_matrix.load_audio_matrix(file_name=self.__movie_audio_filename)
         else:
             # Matrix doesn't yet exist.  Generate but don't save
             load_full_data = self.full_matrix.generate_temp_matrix(file_name=self.__movie_audio_filename)
@@ -28,9 +23,7 @@ class AudioLoader:
         # Load/generate matrix for audio fragment
         if self.__sound_fragment_filename.endswith(".npz"):
             # Matrix already exists in storage.  Load it
-            load_frag_data = self.frag_matrix.load_audio_matrix(
-                file_name=self.__sound_fragment_filename,
-                custom_path=self.__custom_path)
+            load_frag_data = self.frag_matrix.load_audio_matrix(file_name=self.__sound_fragment_filename)
 
             if load_frag_data['error']: return load_frag_data
 

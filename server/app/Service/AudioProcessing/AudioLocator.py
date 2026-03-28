@@ -1,11 +1,5 @@
 from scipy import signal
 import numpy as np
-import logging
-
-logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
-#TODO - add timestamp to log entry
-#TODO - set up single logging object, pass to subroutines as needed
-#TODO - or log to DB?
 
 class AudioLocator:
 

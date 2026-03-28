@@ -1,10 +1,6 @@
 import numpy as np
-import logging
 import librosa
 import os
-
-logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
-
 
 class AudioFileManager:
     """
@@ -19,14 +15,15 @@ class AudioFileManager:
             - 'error' (bool): True if an error occurred during the operation, False otherwise.
             - 'message' (str): A message indicating the result of the operation.
     """
-    def __init__(self):
+    def __init__(self,logger):
         self.audio_matrix = None
         self.sample_rate = None
         self.audio_duration = None
+        self.logger = logger
 
     @staticmethod
-    def save_audio_matrix(audio_path, file_name, custom_path=False):
-        storage_path = "./storage/" + file_name if not custom_path else file_name
+    def save_audio_matrix(audio_path, file_name, logger):
+        storage_path = "./storage/" + file_name
         try:
             audio_matrix, sample_rate = librosa.load(path=audio_path, sr=None)
             audio_duration = librosa.get_duration(path=audio_path, sr=sample_rate)
@@ -44,7 +41,7 @@ class AudioFileManager:
                      )
             return {"error": False, "message": "Audio matrix saved successfully"}
         except Exception as error:
-            logging.error(f'Error: {str(error)}')
+            logger.error(str(error))
             return {
                 "error": True,
                 "message": f'Error saving audio matrix: {str(error)}',
@@ -57,8 +54,8 @@ class AudioFileManager:
         # Location: ./storage/corr/[full]/[frag].npz
         pass
 
-    def load_audio_matrix(self, file_name, custom_path=False):
-        storage_path = "./storage/" + file_name if not custom_path else file_name
+    def load_audio_matrix(self, file_name):
+        storage_path = "./storage/" + file_name
         try:
             data = np.load(storage_path)
             self.audio_matrix = data["audio_matrix"]
@@ -89,7 +86,7 @@ class AudioFileManager:
                 "message": 'Audio matrix generated successfully'
             }
         except Exception as error:
-            logging.error(f'Error: {str(error)}')
+            self.logger.error(str(error))
             return {
                 "error": True,
                 "message": f'Error generating audio matrix: {str(error)}',

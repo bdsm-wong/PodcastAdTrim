@@ -12,7 +12,7 @@ class AudioStorageController:
         }
     """
     @staticmethod
-    def invokable(request):
+    def invokable(request,logger):
         try:
             #TODO - record elapsed time to process the file
             data = request.form.to_dict()
@@ -24,7 +24,10 @@ class AudioStorageController:
                     temp_audio_file.write(audio_data.read())
                     temp_audio_file_name = temp_audio_file.name
 
-            audio_file_manager = AudioFileManager.save_audio_matrix(audio_path=temp_audio_file_name, file_name=storage_path)
+            audio_file_manager = AudioFileManager.save_audio_matrix(
+                audio_path=temp_audio_file_name,
+                file_name=storage_path,
+                logger=logger)
 
             if(audio_file_manager['error']): return ResponseHttp.error_message(message=audio_file_manager['message'],status_code=500)
             return ResponseHttp.successful_message([audio_file_manager['message']])
