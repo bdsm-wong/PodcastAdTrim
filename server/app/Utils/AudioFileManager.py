@@ -53,6 +53,7 @@ class AudioFileManager:
     @staticmethod
     def save_correlate_matrix():
         #TODO - save result matrix/matrices from correlate process
+        #TODO - add ENV variable to trigger saving
         # Location: ./storage/corr/[full]/[frag].npz
         pass
 

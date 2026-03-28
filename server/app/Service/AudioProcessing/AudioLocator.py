@@ -3,6 +3,9 @@ import numpy as np
 import logging
 
 logging.basicConfig(filename='audio_detection_service.log', level=logging.ERROR)
+#TODO - add timestamp to log entry
+#TODO - set up single logging object, pass to subroutines as needed
+#TODO - or log to DB?
 
 class AudioLocator:
 
@@ -25,6 +28,9 @@ class AudioLocator:
     def find_segment(self, num_parts = 4):
         try:
             part_length = len(self.__audio_matrix) // num_parts
+            #TODO - test whether there are performance improvements when processing matrix in parts
+            #TODO - if there are performance gains, are there discontinuities in the correlate matrix at the boundaries?
+            #TODO - if no performance gains, just process as single matrix and remove ENV variable
             
             for part_number in range(1, num_parts + 1):
                 correlate_data = self._correlate(part_length=part_length, part_number=part_number)

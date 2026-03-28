@@ -54,6 +54,8 @@ class AudioProcessor:
             total_execution_time_end = time.time()
             self._total_execution_time = total_execution_time_end - total_execution_time_start
 
+            #TODO - store results to database
+
             # Show elements
             return {
                 'error': False,
