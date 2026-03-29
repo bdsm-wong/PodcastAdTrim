@@ -1,8 +1,11 @@
 from flask import Flask
+from dotenv import load_dotenv
+import os
 import logging
 
-#TODO - read in log level from ENV file
-logging.basicConfig(filename='audio_detection_service.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s : %(message)s')
+load_dotenv()
+logLevelStr = os.getenv('LOG_LEVEL', default='ERROR').upper()
+logging.basicConfig(filename='audio_detection_service.log', level=logLevelStr, format=f'%(asctime)s %(levelname)s : %(message)s')
 
 app = Flask(__name__)
 

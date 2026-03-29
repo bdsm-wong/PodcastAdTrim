@@ -2,10 +2,7 @@ import time
 from .AudioProcessing import AudioLoader
 from .AudioProcessing import AudioLocator
 from ..Utils import AudioThresholdValidator, get_minutes_and_seconds
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 class AudioProcessor:
     def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, logger=None,
