@@ -9,7 +9,8 @@ class ResponseHttp:
         })
         response.status_code = status_code
         return response
-    
+
+    @staticmethod
     def successful_message(message):
         response = jsonify({
             'error': False,

@@ -2,6 +2,7 @@ from flask import jsonify
 from ..Utils import AudioFileManager, ResponseHttp
 import tempfile
 import io
+import time
 
 class AudioStorageController:
     """
@@ -14,7 +15,7 @@ class AudioStorageController:
     @staticmethod
     def invokable(request,logger):
         try:
-            #TODO - record elapsed time to process the file
+            storage_start_time = time.time()
             data = request.form.to_dict()
             storage_path = f"{data.get('type_audio')}/{data.get('name_audio')}.npz"
 
@@ -30,6 +31,9 @@ class AudioStorageController:
                 logger=logger)
 
             if(audio_file_manager['error']): return ResponseHttp.error_message(message=audio_file_manager['message'],status_code=500)
-            return ResponseHttp.successful_message([audio_file_manager['message']])
+            storage_end_time = time.time()
+            storage_elapsed_time = storage_end_time - storage_start_time
+
+            return ResponseHttp.successful_message(f"{audio_file_manager['message']}.  Completed in {str(storage_elapsed_time)} seconds.")
         except Exception as e:
             return ResponseHttp.error_message(message=f'AudioStorageControler => {e} ', status_code=500)
