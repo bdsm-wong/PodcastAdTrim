@@ -25,7 +25,6 @@ class AudioLocator:
         try:
             part_length = len(self.__audio_matrix) // num_parts
 
-            self.__logger.info(f'Part length: {str(part_length)}')
             #TODO - test whether there are performance improvements when processing matrix in parts
             #TODO - if there are performance gains, are there discontinuities in the correlate matrix at the boundaries?
             #TODO - if no performance gains, just process as single matrix and remove ENV variable
@@ -33,6 +32,10 @@ class AudioLocator:
             for part_number in range(1, num_parts + 1):
                 correlate_data = self._correlate(part_length=part_length, part_number=part_number)
                 if correlate_data['error']: return correlate_data
+
+            self.__logger.info(f'Part length: {str(part_length)}')
+            self.__logger.info(f'Frag length: {str(len(self.__audio_fragment_matrix))}')
+            self.__logger.info(f'Correlation length: {str(len(self.corr_matrix_ary[0]))}')
 
             max_correlation_index = self.max_corr_ary.index(max(self.max_corr_ary))
             relative_peak_sec = self.peak_sec_ary[max_correlation_index]
