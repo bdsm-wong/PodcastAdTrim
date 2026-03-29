@@ -14,7 +14,7 @@ try:
     app.logger.setLevel(logLevelStr)
 except ValueError:
     app.logger.setLevel(logging.ERROR)
-    app.logger.ERROR(f"Invalid Log Level in .env file: {logLevelStr}.  ERROR used instead.")
+    app.logger.error(f"Invalid Log Level in .env file: {logLevelStr}.  ERROR used instead.")
 
 from .Service import AudioProcessor
 from .Routes import api
