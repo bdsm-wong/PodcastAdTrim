@@ -51,7 +51,7 @@ class AudioLocator:
 
                 # Shift back start of next partition to allow "overscanning" during correlation
                 # This is required to eliminate discontinuities at partition boundaries
-                start = end - frag_matrix_len
+                start = end - frag_matrix_len + 1
 
             #TODO - watch for "off by one" errors while traversing arrays
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
@@ -76,11 +76,16 @@ class AudioLocator:
             if this_max_corr > self.max_correlation:
                 peak_idx = np.argmax(correlation) + start
                 self.exact_second = peak_idx / self.__sample_rate
+                self.__logger.info(f'UPDATED PEAK! ... peak_idx: {str(peak_idx)}, exact_second: {self.exact_second}')
+
+            self.__logger.info(f'this_max_corr: {str(this_max_corr)}, max_corr: {str(self.max_correlation)}')
+
 
             # Append part data to arrays
             #self.corr_matrix_ary = np.concatenate((self.corr_matrix_ary,correlation),axis=0)
 
             self.__logger.info(f'start: {str(start)}, end: {str(end)}, len(correlation): {str(len(correlation))}')
+
 
             return {
                 "error": False,
