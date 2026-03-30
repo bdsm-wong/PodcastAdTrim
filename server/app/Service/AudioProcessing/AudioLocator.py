@@ -55,9 +55,11 @@ class AudioLocator:
                 start = end - frag_matrix_len + 1
 
             # Flatten the array of correlation parts
+            '''
             for part in self.__corr_part_ary:
                 for sample in part:
                     self.correlation_matrix.append(sample)
+            '''
             self.__logger.info(f'len(corr_part_ary): {str(len(self.__corr_part_ary))} len(correlation_matrix): {str(len(self.correlation_matrix))}')
 
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
@@ -85,7 +87,8 @@ class AudioLocator:
                 self.exact_second = peak_idx / self.__sample_rate
 
             # Append this part's correlation data to array
-            self.__corr_part_ary.append(correlation)
+            #self.__corr_part_ary.append(correlation)
+            self.correlation_matrix = np.concatenate((self.correlation_matrix, correlation), axis=0)
 
             return {
                 "error": False,
