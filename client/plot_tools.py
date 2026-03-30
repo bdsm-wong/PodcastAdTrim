@@ -32,7 +32,7 @@ class Matrix:
 
 #load matrices from 'storage' directory
 storage_dir = '/media/ubuntu01/AudioTimeStamp-Detective/storage'
-test_file = 'test'
-#test_file = '1997-04-02 (Guest - no guest)'
+#test_file = 'test'
+test_file = 'full/1997-04-02 (Guest - no guest)'
 test_matrix = Matrix(storage_dir,test_file)
 test_matrix.plot_data()
