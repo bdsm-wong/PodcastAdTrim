@@ -37,11 +37,13 @@ class AudioProcessor:
         
             # Find Position
             self._audio_locator = AudioLocator(audio_loader=self._audio_loader, logger=self._logger)
-            num_parts = int(os.getenv("NUM_PARTITIONS_CORRELATE", default=4))
-            find_segment_audio = self._audio_locator.find_segment(num_parts=num_parts)
+            max_partition_size = int(os.getenv("MAX_PARTITION_SIZE", default=5300000))
+            find_segment_audio = self._audio_locator.find_segment(max_partition_size=max_partition_size)
             if find_segment_audio['error']: return find_segment_audio
 
-            #TODO - save correlate matrix to file
+            #TODO - save corr_matrix_ary to file
+            #TODO - can this be saved if we aren't using stored matrices?
+            #TODO - add an ENV flag to control whether this is saved (or use logLevel <= logger.INFO?)
 
             # ---- FINISH TIME ----
             total_execution_time_end = time.time()
@@ -61,7 +63,9 @@ class AudioProcessor:
                 "error": True,
                 "message": f'Error loading an search audio: {str(error)}',
             }
-    
+
+    #TODO - don't think this method is needed any more
+    # handled in AudioLocator.find_segment
     def _validate_fragment_audio(self):
         _frag_duration = self._audio_loader.frag_matrix.audio_duration
         if _frag_duration < float(self._recorded_fragment_duration_min):

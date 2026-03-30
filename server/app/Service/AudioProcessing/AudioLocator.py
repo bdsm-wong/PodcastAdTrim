@@ -4,10 +4,8 @@ import numpy as np
 class AudioLocator:
 
     def __init__(self, audio_loader, logger):
-        # Array results from each part
+        # Combined array with correlation results from each part
         self.corr_matrix_ary = []
-        self.peak_sec_ary = []
-        self.max_corr_ary = []
 
         self.__logger = logger
 
@@ -21,28 +19,39 @@ class AudioLocator:
         self.exact_second = 0
         self.max_correlation = 0
 
-    def find_segment(self, num_parts = 4):
+    def find_segment(self, max_partition_size=5300000):
         try:
-            part_length = len(self.__audio_matrix) // num_parts
+            full_matrix_len = len(self.__audio_matrix)
+            full_matrix_max_idx = full_matrix_len - 1
+            frag_matrix_len = len(self.__audio_fragment_matrix)
 
-            #TODO - test whether there are performance improvements when processing matrix in parts
-            #TODO - if there are performance gains, are there discontinuities in the correlate matrix at the boundaries?
-            #TODO - if no performance gains, just process as single matrix and remove ENV variable
-            
-            for part_number in range(1, num_parts + 1):
-                correlate_data = self._correlate(part_length=part_length, part_number=part_number)
+            if frag_matrix_len > full_matrix_len:
+                return {"error": True,
+                        "message": f'Fragment matrix length ({str(frag_matrix_len)}) exceeds full matrix length ({str(full_matrix_len)}).'
+                        }
+
+            if frag_matrix_len > max_partition_size:
+                return {"error": True,
+                        "message": f'Fragment matrix length ({str(frag_matrix_len)}) exceeds max partition size ({str(max_partition_size)}).'
+                        }
+
+            start = 0
+            end = 0
+            while end < full_matrix_max_idx:
+                #set bounds of the correlation partition
+                if start + max_partition_size > full_matrix_max_idx:
+                    end = full_matrix_max_idx
+                else:
+                    end = start + max_partition_size
+
+                correlate_data = self._correlate(start=start, end=end)
                 if correlate_data['error']: return correlate_data
 
-            self.__logger.info(f'Part length: {str(part_length)}')
-            self.__logger.info(f'Frag length: {str(len(self.__audio_fragment_matrix))}')
-            self.__logger.info(f'Correlation length: {str(len(self.corr_matrix_ary[0]))}')
+                # Shift back start of next partition to allow "overscanning" during correlation
+                # This is required to eliminate discontinuities at partition boundaries
+                start = end - frag_matrix_len
 
-            max_correlation_index = self.max_corr_ary.index(max(self.max_corr_ary))
-            relative_peak_sec = self.peak_sec_ary[max_correlation_index]
-            
-            #TODO - stitch together all correlate sub-matrices and trim to full_audio length
-            self.exact_second = (self.__audio_duration * max_correlation_index / num_parts) + relative_peak_sec
-            self.max_correlation = self.max_corr_ary[max_correlation_index]
+            #TODO - watch for "off by one" errors while traversing arrays
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
 
             return {"error": False,
@@ -54,24 +63,25 @@ class AudioLocator:
                 "message": f'Error finding segment: {str(error)}',
             }
 
-    def _correlate(self, part_length, part_number=1):
+    def _correlate(self, start, end):
         try:
-            start = (part_number - 1) * part_length
-            end = part_number * part_length
-            #TODO - how to prevent from processing part that is shorter than fragment duration?
-            #TODO - what happens when we try to access array index out of bounds?
             audio_matrix_part = self.__audio_matrix[start:end]
 
             correlation = signal.correlate(audio_matrix_part, self.__audio_fragment_matrix, mode='valid', method='fft')
 
-            peak = np.argmax(correlation)
-            peak_second = peak / self.__sample_rate
-            max_correlation = np.max(correlation)
+            # Compare local correlation max to overall max and compute/update timestamp as needed
+            this_max_corr = np.max(correlation)
+            if this_max_corr > self.max_correlation:
+                peak_idx = np.argmax(correlation) + start
+                self.exact_second = peak_idx / self.__sample_rate
 
             # Append part data to arrays
             self.corr_matrix_ary.append(correlation)
-            self.peak_sec_ary.append(peak_second)
-            self.max_corr_ary.append(max_correlation)
+
+            self.__logger.info(f'start: {str(start)}, \
+                end: {str(end)}, \
+                len(correlation): {str(len(correlation))}, \
+                len(corr_matrix_ary): {str(len(self.corr_matrix_ary))}')
 
             return {
                 "error": False,
