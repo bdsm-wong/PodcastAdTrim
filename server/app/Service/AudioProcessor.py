@@ -48,7 +48,7 @@ class AudioProcessor:
                 AudioFileManager.save_correlate_matrix(
                     movie_audio_filename=self._movie_audio_filename,
                     sound_fragment_filename=self._sound_fragment_filename,
-                    correlation_matrix=self._audio_locator.correlation_matrix,
+                    audio_locator=self._audio_locator,
                     logger=self._logger
                 )
 

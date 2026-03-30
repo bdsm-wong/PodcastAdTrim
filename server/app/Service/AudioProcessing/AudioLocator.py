@@ -26,8 +26,6 @@ class AudioLocator:
             full_matrix_max_idx = full_matrix_len - 1
             frag_matrix_len = len(self.__audio_fragment_matrix)
 
-            self.__logger.info(f'full_matrix_len: {str(full_matrix_len)}, frag_matrix_len: {str(frag_matrix_len)}, max_partition_size: {str(max_partition_size)}')
-
             if frag_matrix_len > full_matrix_len:
                 return {"error": True,
                         "message": f'Fragment matrix length ({str(frag_matrix_len)}) exceeds full matrix length ({str(full_matrix_len)}).'
@@ -54,7 +52,12 @@ class AudioLocator:
                 # This is required to eliminate discontinuities at partition boundaries
                 start = end - frag_matrix_len + 1
 
-            self.__logger.info(f'len(correlation_matrix): {str(len(self.correlation_matrix))}')
+            # Build log string for debugging
+            infoStr = f'full_matrix_len: {str(full_matrix_len)}, '
+            infoStr += f'frag_matrix_len: {str(frag_matrix_len)}, '
+            infoStr += f'max_partition_size: {str(max_partition_size)}, '
+            infoStr += f'len(correlation_matrix): {str(len(self.correlation_matrix))}'
+            self.__logger.info(infoStr)
 
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
 
