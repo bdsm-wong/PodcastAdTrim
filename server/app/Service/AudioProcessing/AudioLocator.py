@@ -54,7 +54,7 @@ class AudioLocator:
                 # This is required to eliminate discontinuities at partition boundaries
                 start = end - frag_matrix_len + 1
 
-            self.correlation_matrix = np.ravel(self.corr_parts_ary)
+            self.correlation_matrix = self.corr_parts_ary.flatten
             self.__logger.info(f'len(correlation_matrix): {str(len(self.correlation_matrix))}')
 
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
