@@ -78,9 +78,9 @@ class AudioLocator:
                 self.exact_second = peak_idx / self.__sample_rate
 
             # Append part data to arrays
-            self.corr_matrix_ary = np.concatenate((self.corr_matrix_ary,correlation),axis=0)
+            #self.corr_matrix_ary = np.concatenate((self.corr_matrix_ary,correlation),axis=0)
 
-            self.__logger.info(f'start: {str(start)}, end: {str(end)}, len(correlation): {str(len(correlation))}, len(corr_matrix_ary): {str(len(self.corr_matrix_ary))}')
+            self.__logger.info(f'start: {str(start)}, end: {str(end)}, len(correlation): {str(len(correlation))}')
 
             return {
                 "error": False,
