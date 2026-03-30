@@ -85,7 +85,7 @@ class AudioLocator:
                 self.exact_second = peak_idx / self.__sample_rate
 
             # Append this part's correlation data to array
-            self.correlation_matrix.append(correlation)
+            self.__corr_part_ary.append(correlation)
 
             return {
                 "error": False,
