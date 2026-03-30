@@ -1,8 +1,9 @@
 import time
 from .AudioProcessing import AudioLoader
 from .AudioProcessing import AudioLocator
-from ..Utils import AudioThresholdValidator, get_minutes_and_seconds
+from ..Utils import AudioThresholdValidator, get_minutes_and_seconds, AudioFileManager
 import os
+import logging
 
 class AudioProcessor:
     def __init__(self, movie_audio_filename=None, sound_fragment_filename=None, logger=None,
@@ -41,9 +42,15 @@ class AudioProcessor:
             find_segment_audio = self._audio_locator.find_segment(max_partition_size=max_partition_size)
             if find_segment_audio['error']: return find_segment_audio
 
-            #TODO - save corr_matrix_ary to file
-            #TODO - can this be saved if we aren't using stored matrices?
-            #TODO - add an ENV flag to control whether this is saved (or use logLevel <= logger.INFO?)
+            # Save correlation matrix to file for debugging
+            # Only save if both full and frag matrices were already present in storage (not temp)
+            if self._audio_loader.both_stored and (self._logger.getEffectiveLevel() <= logging.DEBUG):
+                AudioFileManager.save_correlate_matrix(
+                    full_audio_name=self._movie_audio_filename,
+                    audio_fragment_name=self._sound_fragment_filename,
+                    correlation_matrix=self._audio_locator.correlation_matrix,
+                    logger=self._logger
+                )
 
             # ---- FINISH TIME ----
             total_execution_time_end = time.time()

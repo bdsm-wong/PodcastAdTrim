@@ -48,11 +48,23 @@ class AudioFileManager:
             }
 
     @staticmethod
-    def save_correlate_matrix():
-        #TODO - save result matrix/matrices from correlate process
-        #TODO - add ENV variable to trigger saving
+    def save_correlate_matrix(full_audio_name, audio_fragment_name, correlation_matrix, logger):
+        # Save result matrix/matrices from correlate process
         # Location: ./storage/corr/[full]/[frag].npz
-        pass
+        storage_dir = "./storage/corr/" + full_audio_name
+        try:
+            os.makedirs(storage_dir, exist_ok=True)
+            storage_path = storage_dir + "/" + audio_fragment_name
+
+            np.save(storage_path, correlation_matrix)
+
+            return {"error": False, "message": "Correlation matrix saved successfully"}
+        except Exception as error:
+            logger.error(str(error))
+            return {
+                "error": True,
+                "message": f'Error saving correlation matrix: {str(error)}',
+            }
 
     def load_audio_matrix(self, file_name):
         storage_path = "./storage/" + file_name

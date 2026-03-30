@@ -9,6 +9,9 @@ class AudioLoader:
         self.full_matrix = AudioFileManager(logger=logger)
         self.frag_matrix = AudioFileManager(logger=logger)
 
+        # Flag indicating both matrices were already present in storage
+        self.both_stored = True
+
     def load_audio_data(self):
         # Load/generate matrix for full audio
         if self.__movie_audio_filename.endswith(".npz"):
@@ -17,6 +20,7 @@ class AudioLoader:
         else:
             # Matrix doesn't yet exist.  Generate but don't save
             load_full_data = self.full_matrix.generate_temp_matrix(file_name=self.__movie_audio_filename)
+            self.both_stored = False
 
         if load_full_data['error']: return load_full_data
 
@@ -42,6 +46,7 @@ class AudioLoader:
 
             # Matrix doesn't yet exist.  Generate but don't save
             load_frag_data = self.frag_matrix.generate_temp_matrix(file_name=self.__sound_fragment_filename)
+            self.both_stored = False
 
             if load_frag_data['error']: return load_frag_data
 
