@@ -25,6 +25,8 @@ class AudioLocator:
             full_matrix_max_idx = full_matrix_len - 1
             frag_matrix_len = len(self.__audio_fragment_matrix)
 
+            self.__logger.info(f'full_matrix_len: {str(full_matrix_len)}, frag_matrix_len: {str(frag_matrix_len)}')
+
             if frag_matrix_len > full_matrix_len:
                 return {"error": True,
                         "message": f'Fragment matrix length ({str(frag_matrix_len)}) exceeds full matrix length ({str(full_matrix_len)}).'
@@ -42,7 +44,7 @@ class AudioLocator:
                 if start + max_partition_size > full_matrix_max_idx:
                     end = full_matrix_max_idx
                 else:
-                    end = start + max_partition_size
+                    end = start + max_partition_size - 1
 
                 correlate_data = self._correlate(start=start, end=end)
                 if correlate_data['error']: return correlate_data
@@ -76,12 +78,9 @@ class AudioLocator:
                 self.exact_second = peak_idx / self.__sample_rate
 
             # Append part data to arrays
-            self.corr_matrix_ary.append(correlation)
+            self.corr_matrix_ary = np.concatenate((self.corr_matrix_ary,correlation),axis=0)
 
-            self.__logger.info(f'start: {str(start)}, \
-                end: {str(end)}, \
-                len(correlation): {str(len(correlation))}, \
-                len(corr_matrix_ary): {str(len(self.corr_matrix_ary))}')
+            self.__logger.info(f'start: {str(start)}, end: {str(end)}, len(correlation): {str(len(correlation))}, len(corr_matrix_ary): {str(len(self.corr_matrix_ary))}')
 
             return {
                 "error": False,
