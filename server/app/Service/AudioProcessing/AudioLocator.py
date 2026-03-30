@@ -5,7 +5,6 @@ class AudioLocator:
 
     def __init__(self, audio_loader, logger):
         # Combined array with correlation results from each part
-        self.corr_parts_ary = []
         self.correlation_matrix = []
 
         self.__logger = logger
@@ -54,7 +53,6 @@ class AudioLocator:
                 # This is required to eliminate discontinuities at partition boundaries
                 start = end - frag_matrix_len + 1
 
-            self.correlation_matrix = self.corr_parts_ary.flatten()
             self.__logger.info(f'len(correlation_matrix): {str(len(self.correlation_matrix))}')
 
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
@@ -81,8 +79,8 @@ class AudioLocator:
                 peak_idx = np.argmax(correlation) + start
                 self.exact_second = peak_idx / self.__sample_rate
 
-            # Append part data to arrays
-            np.append(self.corr_parts_ary,correlation)
+            # Append this part's correlation data to array
+            self.correlation_matrix.extend(correlation)
 
             return {
                 "error": False,
