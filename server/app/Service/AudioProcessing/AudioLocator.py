@@ -1,5 +1,6 @@
 from scipy import signal
 import numpy as np
+import logging
 
 class AudioLocator:
 
@@ -80,7 +81,8 @@ class AudioLocator:
                 self.exact_second = peak_idx / self.__sample_rate
 
             # Append this part's correlation data to array
-            self.correlation_matrix = np.concatenate((self.correlation_matrix, correlation), axis=0)
+            if self.__logger.getEffectiveLevel() <= logging.DEBUG:
+                self.correlation_matrix = np.concatenate((self.correlation_matrix, correlation), axis=0)
 
             return {
                 "error": False,
