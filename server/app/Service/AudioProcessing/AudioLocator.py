@@ -74,6 +74,7 @@ class AudioLocator:
             # Compare local correlation max to overall max and compute/update timestamp as needed
             this_max_corr = np.max(correlation)
             if this_max_corr > self.max_correlation:
+                self.max_correlation = this_max_corr
                 peak_idx = np.argmax(correlation) + start
                 self.exact_second = peak_idx / self.__sample_rate
                 self.__logger.info(f'UPDATED PEAK! ... peak_idx: {str(peak_idx)}, exact_second: {self.exact_second}')
