@@ -48,13 +48,16 @@ class AudioFileManager:
             }
 
     @staticmethod
-    def save_correlate_matrix(full_audio_name, audio_fragment_name, correlation_matrix, logger):
+    def save_correlate_matrix(movie_audio_filename, sound_fragment_filename, correlation_matrix, logger):
         # Save result matrix/matrices from correlate process
         # Location: ./storage/corr/[full]/[frag].npz
-        storage_dir = "./storage/corr/" + full_audio_name
+
+        full_name = movie_audio_filename.replace("full/", "").replace(".npz", "")
+        frag_name = sound_fragment_filename.replace("frag/", "").replace(".npz", "")
+        storage_dir = "./storage/corr/" + full_name
         try:
             os.makedirs(storage_dir, exist_ok=True)
-            storage_path = storage_dir + "/" + audio_fragment_name
+            storage_path = storage_dir + "/" + frag_name
 
             np.save(storage_path, correlation_matrix)
 

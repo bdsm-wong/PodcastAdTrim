@@ -46,8 +46,8 @@ class AudioProcessor:
             # Only save if both full and frag matrices were already present in storage (not temp)
             if self._audio_loader.both_stored and (self._logger.getEffectiveLevel() <= logging.DEBUG):
                 AudioFileManager.save_correlate_matrix(
-                    full_audio_name=self._movie_audio_filename,
-                    audio_fragment_name=self._sound_fragment_filename,
+                    movie_audio_filename=self._movie_audio_filename,
+                    sound_fragment_filename=self._sound_fragment_filename,
                     correlation_matrix=self._audio_locator.correlation_matrix,
                     logger=self._logger
                 )
