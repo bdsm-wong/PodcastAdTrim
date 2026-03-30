@@ -17,8 +17,6 @@ EXPOSE 80
 
 # call gunicorn to serve the app
 CMD gunicorn "app:app" \
-    --worker-class gevent \
-    --worker-connections 1000 \
     --workers ${GUNICORN_WORKERS} \
     --timeout ${GUNICORN_TIMEOUT} \
     --bind "0.0.0.0:80"
