@@ -5,7 +5,8 @@ class AudioLocator:
 
     def __init__(self, audio_loader, logger):
         # Combined array with correlation results from each part
-        self.corr_matrix_ary = []
+        self.corr_parts_ary = []
+        self.correlation_matrix = []
 
         self.__logger = logger
 
@@ -25,7 +26,7 @@ class AudioLocator:
             full_matrix_max_idx = full_matrix_len - 1
             frag_matrix_len = len(self.__audio_fragment_matrix)
 
-            self.__logger.info(f'full_matrix_len: {str(full_matrix_len)}, frag_matrix_len: {str(frag_matrix_len)}')
+            self.__logger.info(f'full_matrix_len: {str(full_matrix_len)}, frag_matrix_len: {str(frag_matrix_len)}, max_partition_size: {str(max_partition_size)}')
 
             if frag_matrix_len > full_matrix_len:
                 return {"error": True,
@@ -53,7 +54,9 @@ class AudioLocator:
                 # This is required to eliminate discontinuities at partition boundaries
                 start = end - frag_matrix_len + 1
 
-            #TODO - watch for "off by one" errors while traversing arrays
+            self.correlation_matrix = np.ravel(self.corr_parts_ary)
+            self.__logger.info(f'len(correlation_matrix): {str(len(self.correlation_matrix))}')
+
             #TODO - determine whether we ACTUALLY found the fragment (minimum correlation threshold?)
 
             return {"error": False,
@@ -77,16 +80,9 @@ class AudioLocator:
                 self.max_correlation = this_max_corr
                 peak_idx = np.argmax(correlation) + start
                 self.exact_second = peak_idx / self.__sample_rate
-                self.__logger.info(f'UPDATED PEAK! ... peak_idx: {str(peak_idx)}, exact_second: {self.exact_second}')
-
-            self.__logger.info(f'this_max_corr: {str(this_max_corr)}, max_corr: {str(self.max_correlation)}')
-
 
             # Append part data to arrays
-            #self.corr_matrix_ary = np.concatenate((self.corr_matrix_ary,correlation),axis=0)
-
-            self.__logger.info(f'start: {str(start)}, end: {str(end)}, len(correlation): {str(len(correlation))}')
-
+            self.corr_parts_ary.append(correlation)
 
             return {
                 "error": False,
